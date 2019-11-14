@@ -1,0 +1,67 @@
+package com.dicoding.picodiploma.submission_fastestman.model;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+import com.dicoding.picodiploma.submission_fastestman.R;
+
+public class DetailActivity extends AppCompatActivity {
+
+    public static  final String EXTRA_FOTO = "FOTO";
+    public static  final String EXTRA_FLAG = "FLAG";
+    public static  final String EXTRA_NAME = "NAME";
+    public static final String EXTRA_CATEGORY = "CATEGORY";
+    public static final String EXTRA_BIO = "BIO";
+    public static final String EXTRA_COUNTRY = "COUNTRY";
+
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
+
+        String title = getIntent().getStringExtra(EXTRA_NAME);
+        setActionBar(title);
+
+        Intent intent = getIntent();
+
+        ImageView imgFoto = findViewById(R.id.img_item_foto);
+        Bundle bundle = intent.getExtras();
+        if (bundle!=null)
+        {
+            int fotoid = bundle.getInt(EXTRA_FOTO);
+            imgFoto.setImageResource(fotoid);
+        }
+
+        ImageView imgFlag = findViewById(R.id.img_item_flag);
+        Bundle bundleF = intent.getExtras();
+        if (bundle!=null)
+        {
+            int flagid = bundleF.getInt(EXTRA_FLAG);
+            imgFlag.setImageResource(flagid);
+        }
+
+        String name = intent.getStringExtra(EXTRA_NAME);
+        TextView tvName = findViewById(R.id.tv_item_name);
+        tvName.setText(name);
+
+        String category =intent.getStringExtra(EXTRA_CATEGORY);
+        TextView tvCategory = findViewById(R.id.tv_item_category);
+        tvCategory.setText(category);
+
+        String bio = intent.getStringExtra(EXTRA_BIO);
+        TextView tvBio = findViewById(R.id.tv_item_bio);
+        tvBio.setText(bio);
+
+        String country = intent.getStringExtra(EXTRA_COUNTRY);
+        TextView tvCountry = findViewById(R.id.atlet_country);
+        tvCountry.setText(country);
+    }
+
+    private void setActionBar(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+}
