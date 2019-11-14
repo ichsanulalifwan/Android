@@ -1,0 +1,103 @@
+package com.dicoding.picodiploma.submission_fastestman.model;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+
+import com.dicoding.picodiploma.submission_fastestman.AboutActivity;
+import com.dicoding.picodiploma.submission_fastestman.R;
+import com.dicoding.picodiploma.submission_fastestman.adapter.ListAthleteAdapter;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private RecyclerView rvAthlete;
+    private ArrayList<Athlete> list = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        String title = "Fastest Man by Category";
+        setActionBarTitle(title);
+
+        rvAthlete = findViewById(R.id.rv_man);
+        rvAthlete.setHasFixedSize(true);
+
+        list.addAll(AthleteBio.getListData());
+        showRecyclerList();
+    }
+
+    private void setActionBarTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+    }
+
+    private void showRecyclerList(){
+        rvAthlete.setLayoutManager(new LinearLayoutManager(this));
+        ListAthleteAdapter listAthleteAdapter = new ListAthleteAdapter(list);
+        rvAthlete.setAdapter(listAthleteAdapter);
+
+        listAthleteAdapter.setOnItemClickCallback(new ListAthleteAdapter.OnItemClickCallback() {
+            @Override
+            public void onItemClicked(Athlete data) {
+                showSelectedAthlete(data);
+            }
+        });
+
+        listAthleteAdapter.setOnItemClickListener(new ListAthleteAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClicked(Athlete athlete){
+                showSelectedAtlet(athlete);
+            }
+        });
+    }
+
+    private void showSelectedAthlete(Athlete atlet) {
+        Toast.makeText(this,  atlet.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void showSelectedAtlet(Athlete athlete) {
+        Intent detailintent = new Intent(MainActivity.this, DetailActivity.class);
+        detailintent.putExtra(DetailActivity.EXTRA_FOTO, athlete.getFoto());
+        detailintent.putExtra(DetailActivity.EXTRA_FLAG, athlete.getFlag());
+        detailintent.putExtra(DetailActivity.EXTRA_NAME, athlete.getName());
+        detailintent.putExtra(DetailActivity.EXTRA_CATEGORY, athlete.getCategory());
+        detailintent.putExtra(DetailActivity.EXTRA_BIO, athlete.getBio());
+        detailintent.putExtra(DetailActivity.EXTRA_COUNTRY, athlete.getCoutry());
+        startActivity(detailintent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.aboutme, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuitem) {
+        int id = menuitem.getItemId();
+        if (id == R.id.app_bar_about) {
+            Intent aboutIntent = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(aboutIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(menuitem);
+    }
+
+    @Override
+    public void onClick(View v) {
+    }
+}
